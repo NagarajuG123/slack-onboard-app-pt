@@ -1,0 +1,64 @@
+display_information:
+  name: Availability-bot-local
+  description: Post availability to user's availability channel
+  background_color: "#1d7c00"
+features:
+  app_home:
+    home_tab_enabled: true
+    messages_tab_enabled: true
+    messages_tab_read_only_enabled: false
+  bot_user:
+    display_name: Availability-Bot-local
+    always_online: true
+  slash_commands:
+    - command: /hi
+      url: <your-domain-url>/slack/command
+      description: test command
+      should_escape: false
+oauth_config:
+  redirect_urls:
+    - <your-domain-url>/slack/add
+  scopes:
+    user:
+      - channels:history
+      - channels:write
+      - chat:write
+      - groups:history
+      - groups:read
+      - groups:write
+      - mpim:history
+      - mpim:read
+      - mpim:write
+      - users:read
+      - users:read.email
+      - im:write
+    bot:
+      - channels:history
+      - channels:join
+      - channels:manage
+      - channels:read
+      - chat:write
+      - chat:write.public
+      - commands
+      - groups:history
+      - groups:read
+      - groups:write
+      - mpim:history
+      - mpim:read
+      - mpim:write
+      - users:read
+      - im:write
+settings:
+  event_subscriptions:
+    request_url: <your-domain-url>/slack/events
+    user_events:
+      - message.channels
+    bot_events:
+      - app_home_opened
+      - message.channels
+  interactivity:
+    is_enabled: true
+    request_url: <your-domain-url>/slack/interactive
+  org_deploy_enabled: false
+  socket_mode_enabled: false
+  token_rotation_enabled: false
