@@ -16,6 +16,7 @@ import { SharedModule } from './shared/shared.module';
 import { SlackApiService } from './shared/services/slackapi.service';
 import { UserService } from './modules/user/user.service';
 import { SlackController } from './modules/slack/slack.controller';
+import { WhatsappModule } from './modules/whatsapp/whatsapp.module';
 
 @Module({
   imports: [
@@ -31,7 +32,7 @@ import { SlackController } from './modules/slack/slack.controller';
       captureUnhandledRejections: true,
       ignoreDuplicateErrors: false,
     }),
-    UserModule, WorkspaceModule, SlackModule, SharedModule],
+    UserModule, WorkspaceModule, SlackModule, SharedModule, WhatsappModule],
   controllers: [AppController,SlackController],
   providers: [AppService],
 })
@@ -50,7 +51,7 @@ export class AppModule {
       clientSecret: this._configService.get('slack.clientSecret'),
       scopes: "",
       authorize: async ({ teamId, enterpriseId }) => {
-        let data = await this._workspaceService.findByTeamId(teamId);
+        let data = await this._workspaceService.find({team_id:teamId});
         return {
             botToken: data.bot_access_token,
             botId: data.bot_id

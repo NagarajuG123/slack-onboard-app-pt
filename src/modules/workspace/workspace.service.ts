@@ -13,13 +13,14 @@ export class WorkspaceService {
         return this._repository.save(workspace);
     }
 
-    async findByTeamId(teamId):Promise<Workspace>{
-        return this._repository.findOne({where:{team_id :teamId}})
+    async find(data):Promise<Workspace>{
+        return this._repository.findOne({where:data})
     }
 
 
+
     async update(data):Promise<Workspace> {
-        const workspace = await this.findByTeamId(data.team_id);
+        const workspace = await this.find(data.team_id);
         let result:any = await this._repository.update(workspace.id,{bot_access_token:data.bot_access_token});
         return result;
     }   

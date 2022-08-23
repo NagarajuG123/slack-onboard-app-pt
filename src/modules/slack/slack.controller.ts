@@ -40,7 +40,7 @@ export class SlackController {
         )) as OauthV2AccessResponse;
         if (data.ok) {
             const { access_token, authed_user, bot_user_id, team } = data;
-            let workspace = await this._workspaceService.findByTeamId(team.id);
+            let workspace = await this._workspaceService.find({team_id:team.id});
             let workspaceData = {
                 team_id: team.id,
                 name: team.name,

@@ -1,4 +1,3 @@
-import { networkInterfaces } from "os";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
 @Entity({

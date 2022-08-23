@@ -13,6 +13,10 @@ export class UserService {
         const user:any = await this._repository.insert(data);
         console.log(user);
         return user;
-        //return await this._repository.save(user);
+    }
+
+    async find(data): Promise<User[]>{
+        const user:any = await this._repository.find({where:data})
+        return user;
     }
 }

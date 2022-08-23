@@ -27,7 +27,7 @@ export class ViewSubmissionService{
     
             const userName = user.name;
 
-            const workspace = await this._workspaceService.findByTeamId(context.teamId);
+            const workspace = await this._workspaceService.find({team_id:context.teamId});
 
             let saveUserResponse = await this._userService.create({
                 name:userName,
