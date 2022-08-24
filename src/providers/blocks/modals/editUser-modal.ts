@@ -1,3 +1,4 @@
+import { text } from 'node:stream/consumers';
 import {
     bold,
     Button,
@@ -15,20 +16,13 @@ import { Block } from 'src/enums/Blocks.enum';
 import { ViewSubmission } from 'src/enums/view-submissions.enum';
 
 
-export function addUserModal(): any {
+export function editUserModal(user): any {
 
     const blocks = [
-			
-        Input({label:'Select User'})
-        .element(
-            UserSelect({
-                placeholder:'Select User',    
-            })
-            .actionId(Action.SelectUser)
-        )
-        .blockId(Block.SelectUser),
+		Section()
+        .text(`Username : <@${user.unique_id}>`),
         Input({
-            label:`Enter User's WhatsApp number without country code`,
+            label:`Enter User's WhatsApp number`,
             blockId:Block.AddWhatsAppNumber,
         })
         .element(
@@ -37,7 +31,7 @@ export function addUserModal(): any {
             })
             .maxLength(10)
             .minLength(10)
-            .placeholder('Ex:8241523000')            
+            .initialValue(user.mobile_number)            
         ),
         Section({text: bold('Select Availability Channel'),blockId:Block.SelectAvailabilityChannel})
         .accessory(
@@ -46,14 +40,16 @@ export function addUserModal(): any {
             .excludeBotUsers()
             .filter('private','public')
             .maxSelectedItems(1)
+            .initialConversations(user.availability_channel_id)
         )
 	];
 
     return Modal({
-        title: 'Add User Details',
+        title: 'Edit User Details',
         submit: 'Submit',
         close: 'Close',
-        callbackId: ViewSubmission.SubmitUserDetails,
+        callbackId: ViewSubmission.UpdateUserDetails,
+        privateMetaData:JSON.stringify(user)
       })
       .blocks(blocks)
         .buildToJSON();
