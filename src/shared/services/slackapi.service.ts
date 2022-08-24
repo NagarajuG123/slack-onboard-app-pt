@@ -24,6 +24,8 @@ export class SlackApiService {
         text: string,
         blocks?: Block[],
     ): Promise<WebAPICallResult> {
+
+        console.log(blocks);
         const data = { token, channel, text, blocks, unfurl_links: false };
         let response;
         try {

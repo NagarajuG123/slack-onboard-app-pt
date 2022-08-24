@@ -19,9 +19,10 @@ export class WorkspaceService {
 
 
 
-    async update(data):Promise<Workspace> {
-        const workspace = await this.find(data.team_id);
-        let result:any = await this._repository.update(workspace.id,{bot_access_token:data.bot_access_token});
-        return result;
+    async update(id,data):Promise<Workspace> {
+        let res;
+        let result:any = await this._repository.update({id:id},data);
+        result.affected == 1 ? res = true :  res=false
+        return res;
     }   
 }

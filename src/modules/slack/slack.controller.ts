@@ -51,7 +51,8 @@ export class SlackController {
             if (!workspace) {
                 workspace = await this._workspaceService.create(workspaceData);
             }else{
-                workspace = await this._workspaceService.update(workspaceData)
+                let workspaceResponse = await this._workspaceService.update(workspace.id,workspaceData);
+                workspace = await this._workspaceService.find({team_id:team.id});
             }
                 const usersInfo = (await this._slackApiService.usersInfo(
                     workspace.bot_access_token,

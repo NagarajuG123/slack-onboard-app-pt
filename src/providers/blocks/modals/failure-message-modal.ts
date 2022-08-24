@@ -5,15 +5,14 @@ import {
 } from 'slack-block-builder';
 
 
-export function userSaveFailModal(): any {
+export function failureMessageModal(message): any {
 
     const blocks = [
-        Section({text: bold('Unable to save User Details 😟')})
+        Section({text: bold(message)})
 	];
 
     return Modal({
         title: 'Failure Message',
-        submit: 'Submit',
         close: 'Close'
       })
       .blocks(blocks)

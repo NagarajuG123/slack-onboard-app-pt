@@ -9,7 +9,6 @@ export class UserService {
     private _repository: Repository<User>;
 
     async create(data): Promise<User> {
-        //console.log(data);
         const user:any = await this._repository.insert(data);
         console.log(user);
         return user;
@@ -18,5 +17,19 @@ export class UserService {
     async find(data): Promise<User[]>{
         const user:any = await this._repository.find({where:data})
         return user;
+    }
+
+    async delete(data): Promise<boolean>{
+        let res;
+        const response:any = await this._repository.delete(data);
+        response.affected == 1 ? res = true : res = false;
+        return res;  
+    }
+
+    async update(id,data): Promise<boolean>{
+        let res;
+        const response:any = await this._repository.update({id:id},data);
+        response.affected == 1 ? res = true : res = false;
+        return res;  
     }
 }
