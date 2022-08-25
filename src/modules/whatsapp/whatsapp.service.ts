@@ -33,9 +33,9 @@ export class WhatsappService{
             response = await this._slackApiService.postBlockMessage(workspace.bot_access_token,user[0].availability_channel_id,content.text,postMessage(content.text));
             }
             await this._slackApiService.postBlockMessage(workspace.bot_access_token,workspace.default_channel,content.text,postToDefaultChannel(senderNumber,contact.displayName,content.text))
-            // if(response.ok){
-            //     await this.postAcknowledgement(message);
-            // }
+            if(response.ok){
+                await this.postAcknowledgement(message);
+            }
         
     }
 
@@ -55,26 +55,26 @@ export class WhatsappService{
     } 
     
     
-    // async postAcknowledgement(message){
-    //     let {conversationId} = message;
-    //     let mbAcessKey = this._configService.get('messageBirdKey');
-    //     var messagebird = require('messagebird')(mbAcessKey);
+    async postAcknowledgement(message){
+        let {conversationId} = message;
+        let mbAcessKey = this._configService.get('messageBirdKey');
+        var messagebird = require('messagebird')(mbAcessKey);
 
-    //     var params = {
-    //         'type': 'text',
-    //         'content': {
-    //         'text': 'Your request is posted to Slack Successfully!'
-    //         },
-    //         "source": {
-    //           "foo":"var"
-    //         }
-    //       }
+        var params = {
+            'type': 'text',
+            'content': {
+            'text': 'Your request is posted to Slack Successfully!'
+            },
+            "source": {
+              "foo":"var"
+            }
+          }
           
-    //       messagebird.conversations.reply(conversationId, params, function (err, response) {
-    //         if (err) {
-    //         return console.log(err);
-    //         }
-    //         console.log(response);
-    //       });
-    // }
+          messagebird.conversations.reply(conversationId, params, function (err, response) {
+            if (err) {
+            return console.log(err);
+            }
+            console.log(response);
+          });
+    }
 }
