@@ -18,5 +18,9 @@ export default () => ({
         botScopes: process.env.SLACK_BOT_SCOPES,
         userScopes: process.env.SLACK_USER_SCOPES
     },
-    messageBirdKey:process.env.MESSAGE_BIRD_KEY
+    messagebird:{
+        accessKey:process.env.MESSAGE_BIRD_ACCESS_KEY,
+        signingSecret:process.env.MESSAGE_BIRD_SIGNING_SECRET
+    }
+    
 });
