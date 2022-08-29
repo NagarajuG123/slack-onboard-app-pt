@@ -85,7 +85,6 @@ export class WhatsappService {
         if (err) {
           return console.log(err);
         }
-        console.log(response);
       },
     );
   }
