@@ -13,16 +13,14 @@ import { App } from '@slack/bolt';
 import { WorkspaceService } from './modules/workspace/workspace.service';
 import { SlackService } from './modules/slack/slack.service';
 import { SharedModule } from './shared/shared.module';
-import { SlackApiService } from './shared/services/slackapi.service';
-import { UserService } from './modules/user/user.service';
 import { SlackController } from './modules/slack/slack.controller';
 import { WhatsappModule } from './modules/whatsapp/whatsapp.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load:[environment],
-      isGlobal:true
+      load: [environment],
+      isGlobal: true,
     }),
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     LoggerModule.forRoot({
@@ -32,33 +30,37 @@ import { WhatsappModule } from './modules/whatsapp/whatsapp.module';
       captureUnhandledRejections: true,
       ignoreDuplicateErrors: false,
     }),
-    UserModule, WorkspaceModule, SlackModule, SharedModule, WhatsappModule],
-  controllers: [AppController,SlackController],
+    UserModule,
+    WorkspaceModule,
+    SlackModule,
+    SharedModule,
+    WhatsappModule,
+  ],
+  controllers: [AppController, SlackController],
   providers: [AppService],
 })
 export class AppModule {
-
   constructor(
-    private _configService : ConfigService,
-    private _workspaceService : WorkspaceService,
-    private _slackService : SlackService
-  ){}
+    private _configService: ConfigService,
+    private _workspaceService: WorkspaceService,
+    private _slackService: SlackService,
+  ) {}
 
   initSlack(receiver: any) {
     const boltApp = new App({
       signingSecret: this._configService.get('slack.signingSecret'),
       clientId: this._configService.get('slack.clientId'),
       clientSecret: this._configService.get('slack.clientSecret'),
-      scopes: "",
+      scopes: '',
       authorize: async ({ teamId, enterpriseId }) => {
-        let data = await this._workspaceService.find({team_id:teamId});
+        let data = await this._workspaceService.find({ team_id: teamId });
         return {
-            botToken: data.bot_access_token,
-            botId: data.bot_id
+          botToken: data.bot_access_token,
+          botId: data.bot_id,
         };
       },
       receiver,
     });
     this._slackService.initSlack(boltApp);
-}
+  }
 }
