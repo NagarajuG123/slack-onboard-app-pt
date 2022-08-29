@@ -10,9 +10,8 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  // @Post('/message')
-  // getMessage(@Req() req,@Body() body){
-  //   console.log(body);
-  //   this.appService.getMessage(req);
-  // }
+  @Get('/exception')
+  getException(): string {
+    return this.appService.getException();
+  }
 }

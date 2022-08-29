@@ -18,6 +18,16 @@ async function bootstrap() {
     },
   });
 
+  // // include and initialize the rollbar library with your access token
+  // var Rollbar = require('rollbar');
+  // var rollbar = new Rollbar({
+  //   accessToken: 'f3d8c897a4224beab8f56bdedfd74cad',
+  //   captureUncaught: true,
+  //   captureUnhandledRejections: true,
+  // });
+
+  // // record a generic message and send it to Rollbar
+  // rollbar.log('Hello world!');
   const httpAdapter = app.get(HttpAdapterHost);
 
   const rollbarLogger = app.get(RollbarLogger);
