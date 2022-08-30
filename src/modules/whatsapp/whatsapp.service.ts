@@ -30,19 +30,22 @@ export class WhatsappService {
         id: user[0].workspace_id,
       });
     }
+    console.log(user);
     if (user && user.availability_channel_id !== null) {
       response = await this._slackApiService.postBlockMessage(
         workspace.bot_access_token,
         user[0].availability_channel_id,
         content.text,
-        postMessage(content.text),
+        postMessage(user[0].unique_id, content.text),
       );
     }
+    let userName = user ? user[0].name : contact.displayName;
+    console.log(userName);
     await this._slackApiService.postBlockMessage(
       workspace.bot_access_token,
       workspace.default_channel,
       content.text,
-      postToDefaultChannel(senderNumber, contact.displayName, content.text),
+      postToDefaultChannel(senderNumber, userName, content.text),
     );
     if (response.ok) {
       await this.postAcknowledgement(message);

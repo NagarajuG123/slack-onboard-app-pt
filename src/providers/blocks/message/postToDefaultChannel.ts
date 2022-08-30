@@ -1,20 +1,14 @@
-import {
-    BlockCollection,
-    bold,
-    Message,
-    Modal,
-    Section,
-} from 'slack-block-builder';
+import { BlockCollection, Section } from 'slack-block-builder';
 
+export function postToDefaultChannel(senderNumber, senderName, message): any {
+  const blocks = [
+    Section()
+      .fields(senderName !== undefined ? ` *Sender Name* : ${senderName}` : '')
+      .fields(
+        senderNumber !== undefined ? ` *Sender Number* : ${senderNumber}` : '',
+      )
+      .fields(message !== undefined ? ` *Message* :\n _${message}_` : ''),
+  ];
 
-export function postToDefaultChannel(senderNumber,senderName,message): any {
-
-    const blocks = [
-        Section()
-        .fields(senderNumber !== undefined ? `*Sender Name*: ${senderName}` : '')
-        .fields(senderName !== undefined ? `*Sender Number*: ${senderNumber}` : '')
-        .fields(message !== undefined ? `*Message*:\n ${message}` : '')
-	];
-
-    return BlockCollection(blocks)
+  return BlockCollection(blocks);
 }

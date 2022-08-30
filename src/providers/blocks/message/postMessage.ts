@@ -1,15 +1,11 @@
-import {
-    BlockCollection,
-    Section,
-} from 'slack-block-builder';
+import { BlockCollection, Section } from 'slack-block-builder';
 
+export function postMessage(userId = 'User', message): any {
+  const blocks = [
+    Section().text(
+      message !== undefined ? `<@${userId}> posted "_${message}_"` : '',
+    ),
+  ];
 
-export function postMessage(message): any {
-
-    const blocks = [
-        Section()
-        .text(message !== undefined ? message : '')
-	];
-
-    return BlockCollection(blocks)
+  return BlockCollection(blocks);
 }
