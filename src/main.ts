@@ -34,7 +34,7 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter, rollbarLogger));
 
   const appModule = app.get(AppModule);
-  appModule.initSlack(receiver);
+  appModule.initSlackEvents(receiver);
 
   app.use(receiver.router);
 

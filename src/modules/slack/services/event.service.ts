@@ -17,19 +17,16 @@ export class EventService {
 
   async HomeTab(event, context, client) {
     try {
+      console.log('inside HomeTab');
       const { user } = (await this._slackApiService.usersInfo(
         context.botToken,
         event.user,
       )) as UsersInfoResponse;
-      const workspace = await this._workspaceService.find({
-        bot_access_token: context.botToken,
+      const workspace = await this._workspaceService.findOne({
+        botAccessToken: context.botToken,
       });
-      const users = await this._userService.find({
-        workspace_id: workspace.id,
-      });
-      const view = user.is_admin
-        ? adminHome(users, users.length, workspace.default_channel)
-        : noViewHome();
+      const view = user.is_admin ? adminHome() : noViewHome();
+      console.log(view);
       await client.views.publish({
         user_id: user.id,
         view: view,

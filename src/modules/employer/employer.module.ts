@@ -6,27 +6,22 @@ import { ViewSubmissionService } from '../slack/services/viewsubmission.service'
 import { SlackModule } from '../slack/slack.module';
 import { SlackService } from '../slack/slack.service';
 import { WorkspaceModule } from '../workspace/workspace.module';
-import { UserSchema } from './user.schema';
-import { UserService } from './user.service';
+import { UserSchema } from './employer.schema';
+import { EmployerService } from './employer.service';
+import { UserService } from '../user/user.service';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       {
-        name: 'User',
+        name: 'Employer',
         schema: UserSchema,
-        collection: 'User',
+        collection: 'Employer',
       },
     ]),
     WorkspaceModule,
   ],
-  providers: [
-    UserService,
-    SlackService,
-    EventService,
-    ActionService,
-    ViewSubmissionService,
-  ],
-  exports: [UserService],
+  providers: [EmployerService],
+  exports: [EmployerService],
 })
-export class UserModule {}
+export class EmployerModule {}

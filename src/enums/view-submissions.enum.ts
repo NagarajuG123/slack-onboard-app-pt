@@ -1,5 +1,3 @@
-export enum ViewSubmission{
-    SubmitUserDetails = 'submit_user_details',
-    UpdateUserDetails = 'update_user_details',
-    SubmitDefaultAvailabilityChannel = 'submit_default_availalability_channel'
+export enum ViewSubmission {
+  SubmitOnboardForm = 'submit_onboard_form_view',
 }
