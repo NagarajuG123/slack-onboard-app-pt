@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { error } from 'console';
 import { Action } from 'src/enums/Actions.enum';
 import { Event } from 'src/enums/events.enum';
 import { ViewSubmission } from 'src/enums/view-submissions.enum';
@@ -13,120 +14,55 @@ export class SlackService {
     private _actionService: ActionService,
     private _viewSubmissionService: ViewSubmissionService,
   ) {}
-  async initSlack(boltApp) {
+  async initSlackEvent(boltApp: any) {
     boltApp.event(Event.AppHomeOpened, async ({ event, context, client }) => {
       await this._eventService.HomeTab(event, context, client);
     });
-
-    boltApp.action(Action.AddUser, async ({ ack, body, context, client }) => {
-      await ack();
-      await this._actionService.addUser(body, context, client);
-    });
-
+  }
+  async initSlackAction(boltApp) {
     boltApp.action(
-      Action.EditUserDetails,
-      async ({ ack, body, context, client }) => {
+      Action.OnboardUser,
+      async ({ ack, context, client, body }) => {
         await ack();
-        await this._actionService.editUserDetails(body, context, client);
+        await this._actionService.openOnboardForm(context, client, body);
       },
     );
 
-    boltApp.action(
-      Action.DeleteUserDetails,
-      async ({ ack, body, context, client }) => {
-        await ack();
-        await this._actionService.deleteUserDetails(body, context, client);
-      },
-    );
-
-    boltApp.action(Action.SelectUser, async ({ ack, context }) => {
+    boltApp.action(Action.AddUserName, async ({ ack }) => {
       await ack();
     });
 
-    boltApp.action(Action.AddWhatsAppNumber, async ({ ack, context }) => {
+    boltApp.action(Action.AddUserEmailAddress, async ({ ack }) => {
       await ack();
     });
 
-    boltApp.action(
-      Action.SelectAvailabilityChannel,
-      async ({ ack, context }) => {
-        await ack();
-      },
-    );
-
-    boltApp.action(
-      Action.RefreshHome,
-      async ({ ack, context, client, body }) => {
-        await ack();
-        await this._actionService.refreshHome(context, client, body);
-      },
-    );
-
-    boltApp.action(
-      Action.AddOrUpdateDefaultChannel,
-      async ({ ack, context, client, body }) => {
-        await ack();
-        await this._actionService.addDefaultChannel(context, client, body);
-      },
-    );
-
-    boltApp.action(Action.SelectDefaultAvailabilityChannel, async ({ ack }) => {
+    boltApp.action(Action.AddUserMobileNumber, async ({ ack }) => {
       await ack();
     });
 
-    boltApp.action(
-      Action.NextButton,
-      async ({ ack, context, client, body }) => {
-        await ack();
-        await this._actionService.nextOrPreviousUsers(context, client, body);
-      },
-    );
-
-    boltApp.action(
-      Action.PreviousButton,
-      async ({ ack, context, client, body }) => {
-        await ack();
-        await this._actionService.nextOrPreviousUsers(context, client, body);
-      },
-    );
-
+    boltApp.action(Action.SelectUserRole, async ({ ack }) => {
+      await ack();
+    });
+  }
+  async initSlackViewSubmission(boltApp) {
     boltApp.view(
-      ViewSubmission.SubmitUserDetails,
-      async ({ ack, view, client, context, body }) => {
+      ViewSubmission.SubmitOnboardForm,
+      async ({ ack, context, client, body, view }) => {
         await ack();
-        await this._viewSubmissionService.SaveUserDetails(
+        await this._viewSubmissionService.processUserOnboard(
+          context,
+          client,
           body,
           view,
-          client,
-          context,
         );
       },
     );
+  }
 
-    boltApp.view(
-      ViewSubmission.UpdateUserDetails,
-      async ({ ack, view, client, context, body }) => {
-        await ack();
-        await this._viewSubmissionService.updateUserDetails(
-          body,
-          view,
-          client,
-          context,
-        );
-      },
-    );
-
-    boltApp.view(
-      ViewSubmission.SubmitDefaultAvailabilityChannel,
-      async ({ ack, view, client, context, body }) => {
-        await ack();
-        await this._viewSubmissionService.saveDefaultChannel(
-          body,
-          view,
-          client,
-          context,
-        );
-      },
-    );
+  async initSlackCommand(boltApp) {
+    boltApp.command('/onboard', async ({ ack, command, respond }) => {
+      await ack();
+      await respond(`Hello <@${command.user_id}>,I'm Onboard Bot`);
+    });
   }
 }

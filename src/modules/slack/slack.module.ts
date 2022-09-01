@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestMiddleware } from '@nestjs/common';
 import { SlackService } from './slack.service';
 import { SlackController } from './slack.controller';
 import { WorkspaceModule } from '../workspace/workspace.module';
@@ -7,11 +7,34 @@ import { EventService } from './services/event.service';
 import { UserModule } from '../user/user.module';
 import { ActionService } from './services/action.service';
 import { ViewSubmissionService } from './services/viewsubmission.service';
+import { SlackMiddleware } from 'src/middleware/slack.middleware';
+import { CommandService } from './services/command.service';
+import { EmployerService } from '../employer/employer.service';
+import { EmployerModule } from '../employer/employer.module';
 
 @Module({
-  imports:[WorkspaceModule,SharedModule,UserModule],
-  providers: [SlackService,EventService,ActionService,ViewSubmissionService],
+  imports: [WorkspaceModule, SharedModule, UserModule, EmployerModule],
+  providers: [
+    SlackService,
+    EventService,
+    ActionService,
+    ViewSubmissionService,
+    CommandService,
+  ],
   controllers: [SlackController],
-  exports:[SlackService,EventService,ActionService,ViewSubmissionService]
+  exports: [
+    SlackService,
+    EventService,
+    ActionService,
+    ViewSubmissionService,
+    CommandService,
+  ],
 })
-export class SlackModule {}
+export class SlackModule {
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer
+  //     .apply(SlackMiddleware)
+  //     .exclude('slack/add')
+  //     .forRoutes(SlackController);
+  // }
+}

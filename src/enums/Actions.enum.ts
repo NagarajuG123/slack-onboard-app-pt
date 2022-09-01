@@ -1,13 +1,8 @@
 export enum Action {
-  AddUser = 'add_user_action',
-  SelectUser = 'select_user_action',
-  AddWhatsAppNumber = 'user_whatsapp_number_action',
-  SelectAvailabilityChannel = 'user_availability_channnel_action',
-  EditUserDetails = 'edit_user_details_action',
-  DeleteUserDetails = 'delete_user_details_action',
+  OnboardUser = 'onboard_user_action',
   RefreshHome = 'refresh_home_action',
-  AddOrUpdateDefaultChannel = 'add_default_channel_action',
-  SelectDefaultAvailabilityChannel = 'select_default_availability_channel_action',
-  NextButton = 'next_button_action',
-  PreviousButton = 'previous_button_action',
+  AddUserName = 'add_user_name_action',
+  AddUserEmailAddress = 'add_user_email_action',
+  AddUserMobileNumber = 'add_user_mobile_num_action',
+  SelectUserRole = 'select_user_role_action',
 }

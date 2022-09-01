@@ -1,6 +1,6 @@
-export enum Block{
-    AddWhatsAppNumber = 'add_user_whatsapp_number_block',
-    SelectUser = 'select_user_block',
-    SelectAvailabilityChannel = 'select_availability_channel_block',
-    SelectDefaultAvailabilityChannel = 'select_default_availability_channel_block'
+export enum Block {
+  AddUserName = 'add_user_name_block',
+  AddUserEmailAddress = 'add_user_email_block',
+  AddUserMobileNumber = 'add_user_mobile_num_block',
+  SelectUserRole = 'select_user_role_block',
 }

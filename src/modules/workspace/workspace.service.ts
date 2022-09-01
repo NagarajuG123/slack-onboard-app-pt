@@ -1,28 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Workspace } from './workspace.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Workspace } from './workspace.schema';
 
 @Injectable()
 export class WorkspaceService {
-    @InjectRepository(Workspace)
-    private _repository: Repository<Workspace>;
+  constructor(
+    @InjectModel('Workspace')
+    private _workspaceModel: Model<Workspace>,
+  ) {}
 
-    async create(data): Promise<Workspace> {
-        const workspace:any = await this._repository.create(data);
-        return this._repository.save(workspace);
-    }
+  async findOne(query): Promise<Workspace> {
+    return this._workspaceModel.findOne(query);
+  }
 
-    async find(data):Promise<Workspace>{
-        return this._repository.findOne({where:data})
-    }
+  async findall(query): Promise<Workspace[]> {
+    return this._workspaceModel.find(query);
+  }
+  async create(query): Promise<Workspace> {
+    return this._workspaceModel.create(query);
+  }
 
-
-
-    async update(id,data):Promise<Workspace> {
-        let res;
-        let result:any = await this._repository.update({id:id},data);
-        result.affected == 1 ? res = true :  res=false
-        return res;
-    }   
+  async findByIdAndUpdate(
+    id: string,
+    set?: { installedBy } | { botAccessToken },
+  ): Promise<Workspace> {
+    return this._workspaceModel.findByIdAndUpdate(id, {
+      $set: set,
+    });
+  }
 }

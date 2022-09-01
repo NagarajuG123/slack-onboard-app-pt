@@ -1,7 +1,7 @@
 import { BlockCollection, Blocks, Elements } from 'slack-block-builder';
 import { Action } from 'src/enums/Actions.enum';
 
-export function header(default_channel?) {
+export function header() {
   const blocks = [];
   blocks.push(
     Blocks.Section()
@@ -10,24 +10,20 @@ export function header(default_channel?) {
         Elements.Button().actionId(Action.RefreshHome).text('Refresh Page'),
       ),
     Blocks.Section()
-      .text(
-        default_channel !== null
-          ? `Default Channel : <#${default_channel}>`
-          : `Default channel is not added yet`,
-      )
+      .text(`Add user to Onboard`)
       .accessory(
         Elements.Button()
-          .actionId(Action.AddOrUpdateDefaultChannel)
-          .text('Add/Update Default Channel')
+          .actionId(Action.OnboardUser)
+          .text('Add User')
           .primary(),
       ),
     Blocks.Divider(),
-    Blocks.Actions().elements(
-      Elements.Button()
-        .actionId(Action.AddUser)
-        .text('Add User Details')
-        .primary(),
-    ),
+    // Blocks.Actions().elements(
+    //   Elements.Button()
+    //     .actionId(Action.AddUser)
+    //     .text('Add User Details')
+    //     .primary(),
+    // ),
   );
 
   return blocks;
