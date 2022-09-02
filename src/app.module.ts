@@ -14,6 +14,10 @@ import { SharedModule } from './shared/shared.module';
 import { SlackController } from './modules/slack/slack.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { EmployerModule } from './modules/employer/employer.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { join } from 'path';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { MailModule } from './modules/mail/mail.module';
 
 @Module({
   imports: [
@@ -38,11 +42,36 @@ import { EmployerModule } from './modules/employer/employer.module';
       }),
       inject: [ConfigService],
     }),
+    MailerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (config: ConfigService) => ({
+        transport: {
+          host: config.get('mail.host'),
+          secure: false,
+          auth: {
+            user: config.get('mail.user'),
+            pass: config.get('mail.password'),
+          },
+        },
+        defaults: {
+          from: '"Visa" <vvisagalakshmi@gmail.com>',
+        },
+        template: {
+          dir: join(__dirname, 'templates'),
+          adapter: new HandlebarsAdapter(),
+          options: {
+            strict: true,
+          },
+        },
+      }),
+      inject: [ConfigService],
+    }),
     UserModule,
     EmployerModule,
     WorkspaceModule,
     SlackModule,
     SharedModule,
+    MailModule,
   ],
   controllers: [AppController, SlackController],
   providers: [AppService],

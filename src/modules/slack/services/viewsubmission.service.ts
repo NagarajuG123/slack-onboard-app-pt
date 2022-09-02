@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UsersInfoResponse } from '@slack/web-api';
 import { RollbarLogger } from 'nestjs-rollbar';
+import { MailService } from 'src/modules/mail/mail.service';
 import { UserService } from 'src/modules/user/user.service';
 import { WorkspaceService } from 'src/modules/workspace/workspace.service';
 import { noViewHome } from 'src/providers/blocks/Home';
@@ -11,12 +12,10 @@ export class ViewSubmissionService {
     private _userService: UserService,
     private _rollbarLogger: RollbarLogger,
     private _workspaceService: WorkspaceService,
+    private _mailService: MailService,
   ) {}
 
-  async processUserOnboard(context, client, body, view) {
-    // const { actions } = body;
-    // console.log(view);
-
+  async processUserOnboard(context, view) {
     const {
       add_user_name_block,
       add_user_email_block,
@@ -30,15 +29,41 @@ export class ViewSubmissionService {
     let userRole =
       select_user_role_block.select_user_role_action.selected_option.value;
 
+    let workspace = await this._workspaceService.findOne({
+      _id: context.teamId,
+    });
+
     let user = await this._userService.findOne({ email: userEmail });
     if (!user) {
       let userData = {
+        workspace: workspace._id,
         name: userName,
         email: userEmail,
         mobileNumber: userMobile,
         userRole: userRole,
       };
       let user = await this._userService.create(userData);
+    }
+
+    let response = await this._mailService.sendMail(
+      userEmail,
+      userName,
+      workspace.slackInvite,
+    );
+  }
+
+  async saveSlackInvite(context, view) {
+    const { get_slack_invite_link_block } = view.state.values;
+
+    let slackInvite =
+      get_slack_invite_link_block.get_slack_invite_link_action.value;
+
+    try {
+      await this._workspaceService.findByIdAndUpdate(context.teamId, {
+        slackInvite: slackInvite,
+      });
+    } catch (error) {
+      this._rollbarLogger.error(error);
     }
   }
 }

@@ -11,9 +11,16 @@ import { SlackMiddleware } from 'src/middleware/slack.middleware';
 import { CommandService } from './services/command.service';
 import { EmployerService } from '../employer/employer.service';
 import { EmployerModule } from '../employer/employer.module';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
-  imports: [WorkspaceModule, SharedModule, UserModule, EmployerModule],
+  imports: [
+    WorkspaceModule,
+    SharedModule,
+    UserModule,
+    EmployerModule,
+    MailModule,
+  ],
   providers: [
     SlackService,
     EventService,

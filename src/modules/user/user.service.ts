@@ -15,7 +15,7 @@ export class UserService {
   }
 
   async findOne(query): Promise<User> {
-    return await this._userModel.create(query);
+    return await this._userModel.findOne(query);
   }
 
   async findByIdAndUpdate(id: string, query): Promise<User> {

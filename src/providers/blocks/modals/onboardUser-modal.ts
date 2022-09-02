@@ -39,7 +39,7 @@ export function onboardUser(userRoles): any {
   ];
   const blocks = [
     Input({
-      label: `Enter email address`,
+      label: `Enter Name`,
       blockId: Block.AddUserName,
     }).element(
       TextInput({

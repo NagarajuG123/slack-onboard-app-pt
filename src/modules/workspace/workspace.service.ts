@@ -23,7 +23,7 @@ export class WorkspaceService {
 
   async findByIdAndUpdate(
     id: string,
-    set?: { installedBy } | { botAccessToken },
+    set?: { installedBy } | { botAccessToken } | { slackInvite },
   ): Promise<Workspace> {
     return this._workspaceModel.findByIdAndUpdate(id, {
       $set: set,
