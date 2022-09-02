@@ -19,6 +19,9 @@ export class Workspace extends Document {
   @Prop()
   botAccessToken: string;
 
+  @Prop()
+  slackInvite: string;
+
   @Prop({
     ref: Employer.name,
     default: null,

@@ -3,4 +3,5 @@ export enum Block {
   AddUserEmailAddress = 'add_user_email_block',
   AddUserMobileNumber = 'add_user_mobile_num_block',
   SelectUserRole = 'select_user_role_block',
+  GetSlackInviteLink = 'get_slack_invite_link_block',
 }

@@ -10,6 +10,7 @@ import { adminHome } from 'src/providers/blocks/Home';
 // import { successMessageModal } from 'src/providers/blocks/modals/success-message-modal';
 import { Action } from 'src/enums/Actions.enum';
 import { onboardUser } from 'src/providers/blocks/modals/onboardUser-modal';
+import { getSlackInvite } from 'src/providers/blocks/modals/getSlackInvite-modal';
 
 @Injectable()
 export class ActionService {
@@ -31,6 +32,13 @@ export class ActionService {
     client.views.open({
       trigger_id: body.trigger_id,
       view: onboardUser(userRoles),
+    });
+  }
+
+  async openAddSlackInviteModal(client, body) {
+    await client.views.open({
+      trigger_id: body.trigger_id,
+      view: getSlackInvite(),
     });
   }
 }

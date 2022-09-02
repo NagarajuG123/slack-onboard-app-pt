@@ -43,18 +43,26 @@ export class SlackService {
     boltApp.action(Action.SelectUserRole, async ({ ack }) => {
       await ack();
     });
+
+    boltApp.action(Action.AddSlackInvite, async ({ ack, body, client }) => {
+      await ack();
+      await this._actionService.openAddSlackInviteModal(client, body);
+    });
   }
   async initSlackViewSubmission(boltApp) {
     boltApp.view(
       ViewSubmission.SubmitOnboardForm,
       async ({ ack, context, client, body, view }) => {
         await ack();
-        await this._viewSubmissionService.processUserOnboard(
-          context,
-          client,
-          body,
-          view,
-        );
+        await this._viewSubmissionService.processUserOnboard(context, view);
+      },
+    );
+
+    boltApp.view(
+      ViewSubmission.SubmitSlackInviteLink,
+      async ({ ack, context, view }) => {
+        await ack();
+        await this._viewSubmissionService.saveSlackInvite(context, view);
       },
     );
   }

@@ -20,4 +20,9 @@ export default () => ({
     accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
     environment: process.env.ROLLBAR_ENVIRONMENT,
   },
+  mail: {
+    host: process.env.EMAIL_HOST,
+    user: process.env.EMAIL_USER,
+    password: process.env.EMAIL_PASSWORD,
+  },
 });

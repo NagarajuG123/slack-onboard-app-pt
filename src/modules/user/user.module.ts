@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { MailModule } from '../mail/mail.module';
 import { ActionService } from '../slack/services/action.service';
 import { EventService } from '../slack/services/event.service';
 import { ViewSubmissionService } from '../slack/services/viewsubmission.service';
@@ -19,6 +20,7 @@ import { UserService } from './user.service';
       },
     ]),
     WorkspaceModule,
+    MailModule,
   ],
   providers: [
     UserService,

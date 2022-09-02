@@ -1,6 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { Common } from 'src/enums/common.enum';
 
 @Schema({
   timestamps: true,
@@ -12,9 +11,6 @@ export class User extends Document {
     index: true,
   })
   workspace: Types.ObjectId;
-
-  @Prop()
-  _id: string;
 
   @Prop()
   name: string;
