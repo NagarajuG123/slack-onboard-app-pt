@@ -10,13 +10,13 @@ export class JobRole extends Document {
   name: string;
 
   @Prop()
-  noOfChannels: string;
-
-  @Prop()
-  userChannelNames: string;
+  privateChannelNames: string;
 
   @Prop({ default: null })
-  projectChannelNames: string;
+  publicChannelNames: string;
+
+  @Prop({ default: null })
+  has_projectChannels: boolean;
 
   @Prop({
     ref: 'Workspace',

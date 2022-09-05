@@ -24,5 +24,6 @@ export default () => ({
     host: process.env.EMAIL_HOST,
     user: process.env.EMAIL_USER,
     password: process.env.EMAIL_PASSWORD,
+    fromEmail: process.env.EMAIL_FROM_EMAIL,
   },
 });

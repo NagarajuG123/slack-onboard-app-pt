@@ -46,7 +46,7 @@ export class ViewSubmissionService {
     let selectedJobRole = await this._jobRoleService.findOne({ name: jobRole });
 
     let user = await await this._userService.findOne({ email: userEmail });
-    console.log(user);
+
     if (!user) {
       let userData = {
         workspace: workspace._id,
@@ -85,29 +85,32 @@ export class ViewSubmissionService {
   async saveJobRole(context, view) {
     const {
       get_jobrole_name_block,
-      get_no_of_channels_block,
-      get_user_channel_names_block,
-      get_project_channel_names_block,
+      get_public_channel_names_block,
+      get_private_channel_names_block,
+      select_projectchannel_required_block,
     } = view.state.values;
 
     //console.log(view.state.values);
 
     let name = get_jobrole_name_block.get_jobrole_name_action.value;
-    let noOfChannels = get_no_of_channels_block.get_no_of_channels_action.value;
+    //let noOfChannels = get_no_of_channels_block.get_no_of_channels_action.value;
     // let channelType =
     //   select_channel_type_block.select_channel_type_action.selected_option
     //     .value;
 
-    let userChannelNames =
-      get_user_channel_names_block.get_user_channel_names_action.value;
-    let projectChannelNames =
-      get_project_channel_names_block.get_project_channel_names_action.value;
+    let publicChannelNames =
+      get_public_channel_names_block.get_public_channel_names_action.value;
+    let privateChannelNames =
+      get_private_channel_names_block.get_private_channel_names_action.value;
+    let has_projectChannels =
+      select_projectchannel_required_block.select_projectchannel_required_action
+        .selected_option.value;
 
     let jobRoleData = {
       name: name,
-      noOfChannels: noOfChannels,
-      userChannelNames: userChannelNames,
-      projectChannelNames: projectChannelNames,
+      publicChannelNames: publicChannelNames,
+      privateChannelNames: privateChannelNames,
+      has_projectChannels: has_projectChannels == 'Yes' ? true : false,
       workspace: context.teamId,
     };
 

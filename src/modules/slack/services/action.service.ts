@@ -41,7 +41,7 @@ export class ActionService {
       jobRoleOptions.push(role.name);
     }
 
-    console.log(jobRoleOptions);
+    //console.log(jobRoleOptions);
     client.views.open({
       trigger_id: body.trigger_id,
       view: onboardUser(jobRoleOptions),
@@ -81,12 +81,11 @@ export class ActionService {
     for (let role of jobRoles) {
       jobRoleOptions.push(role.name);
     }
-    console.log(jobRole);
-    if (jobRole.projectChannelNames !== null) {
-      let projectNameBlock = true;
+    //console.log(jobRole);
+    if (jobRole.has_projectChannels) {
       client.views.update({
         view_id: body.view.id,
-        view: onboardUser(jobRoleOptions, projectNameBlock),
+        view: onboardUser(jobRoleOptions, jobRole.has_projectChannels),
       });
     }
   }

@@ -41,7 +41,6 @@ export class SlackService {
       Action.RefreshHome,
       async ({ ack, client, body, context }) => {
         await ack();
-        console.log(body);
         await this._actionService.refreshPage(client, body);
       },
     );
@@ -72,11 +71,14 @@ export class SlackService {
 
     boltApp.action(Action.GetNoofChannels, async ({ ack, client, body }) => {
       await ack();
-      console.log(body);
       //await this._actionService.addChannelsInput(client, body);
     });
 
     boltApp.action(Action.SelectChannelType, async ({ ack }) => {
+      await ack();
+    });
+
+    boltApp.action(Action.SelectProjectChannelRequired, async ({ ack }) => {
       await ack();
     });
 
