@@ -11,8 +11,9 @@ export enum Action {
   GetJobRoleName = 'get_jobrole_name_action',
   GetNoofChannels = 'get_no_of_channels_action',
   SelectChannelType = 'select_channel_type_action',
-  GetUserChannelNames = 'get_user_channel_names_action',
-  GetProjectChannelNames = 'get_project_channel_names_action',
+  GetPublicChannelNames = 'get_public_channel_names_action',
+  GetPrivateChannelNames = 'get_private_channel_names_action',
   SelectJobRole = 'select_job_role_action',
   GetProjectName = 'get_project_name_action',
+  SelectProjectChannelRequired = 'select_projectchannel_required_action',
 }

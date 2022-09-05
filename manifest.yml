@@ -56,6 +56,7 @@ settings:
     bot_events:
       - app_home_opened
       - message.channels
+      - team_join
   interactivity:
     is_enabled: true
     request_url: <your-domain-url>/slack/interactive

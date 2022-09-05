@@ -19,16 +19,16 @@ import { Block } from 'src/enums/Blocks.enum';
 import { ViewSubmission } from 'src/enums/view-submissions.enum';
 
 export function addJobRolesModal(channelsCount?: number): any {
-  // let options = [
-  //   Option({
-  //     text: 'User',
-  //     value: 'User',
-  //   }),
-  //   Option({
-  //     text: 'Project',
-  //     value: 'Project',
-  //   }),
-  // ];
+  let hasProjectChannelsOptions = [
+    Option({
+      text: 'Yes',
+      value: 'true',
+    }),
+    Option({
+      text: 'No',
+      value: 'false',
+    }),
+  ];
 
   // let noOfChannelsOptions = [
   //   Option({
@@ -49,16 +49,16 @@ export function addJobRolesModal(channelsCount?: number): any {
         actionId: Action.GetJobRoleName,
       }).placeholder('Ex:Devops,DEV'),
     ),
-    Input({
-      label: `Number of Channels to be created for this JobRole`,
-      blockId: Block.GetNoofChannels,
-    }).element(
-      TextInput({
-        actionId: Action.GetNoofChannels,
-        maxLength: 2,
-        minLength: 1,
-      }).placeholder('Enter numbers between 1-9 Ex:2'),
-    ),
+    // Input({
+    //   label: `Number of Channels to be created for this JobRole`,
+    //   blockId: Block.GetNoofChannels,
+    // }).element(
+    //   TextInput({
+    //     actionId: Action.GetNoofChannels,
+    //     maxLength: 2,
+    //     minLength: 1,
+    //   }).placeholder('Enter numbers between 1-9 Ex:2'),
+    // ),
     // Section({
     //   text: bold('Select Number of Channels'),
     //   blockId: Block.SelectNoofChannels,
@@ -74,23 +74,31 @@ export function addJobRolesModal(channelsCount?: number): any {
     //   StaticSelect().actionId(Action.SelectChannelType).options(options),
     // ),
     Input({
-      label: `Enter User Channel names to be created separated by comma`,
-      blockId: Block.GetUserChannelNames,
+      label: `Enter Public Channel names to be created separated by comma \n Give &lt;projectname&gt; or &lt;username&gt; or &lt;role&gt; to replace with particular user's or Project's Name`,
+      blockId: Block.GetPublicChannelNames,
     }).element(
       TextInput({
-        actionId: Action.GetUserChannelNames,
-      }).placeholder('Ex:billing,availability'),
+        actionId: Action.GetPublicChannelNames,
+      }).placeholder('Ex:<ProjectName>-<role>-support'),
     ),
     Input({
-      label: `Enter Project Channel names separated by comma \n Give &lt;ProjectName&gt; or &lt;UserName&gt; to replace with particular user's or Project's Name`,
-      blockId: Block.GetProjectChannelNames,
+      label: `Enter Private Channel names separated by comma \n Give &lt;projectname&gt; or &lt;username&gt; or &lt;role&gt; to replace with particular user's or Project's Name`,
+      blockId: Block.GetPrivateChannelNames,
     })
       .element(
         TextInput({
-          actionId: Action.GetProjectChannelNames,
-        }).placeholder(`Ex:ProjectName-UserName-support`),
+          actionId: Action.GetPrivateChannelNames,
+        }).placeholder(`Ex:<ProjectName>-<UserName>-support`),
       )
       .optional(true),
+    Section({
+      text: bold('Has the required channel has project name?'),
+      blockId: Block.SelectProjectChannelRequired,
+    }).accessory(
+      StaticSelect()
+        .actionId(Action.SelectProjectChannelRequired)
+        .options(hasProjectChannelsOptions),
+    ),
   ];
 
   // if (channelsCount) {

@@ -56,7 +56,7 @@ import { JobRoleModule } from './modules/job-role/job-role.module';
           },
         },
         defaults: {
-          from: '"Visa" <vvisagalakshmi@gmail.com>',
+          from: config.get('mail.fromEmail'),
         },
         template: {
           dir: join(__dirname, 'templates'),
@@ -94,7 +94,6 @@ export class AppModule {
       scopes: '',
       authorize: async ({ teamId, enterpriseId }) => {
         let data = await this._workspaceService.findOne({ _id: teamId });
-        console.log(data);
         return {
           botToken: data.botAccessToken,
           botId: data.botId,
@@ -102,7 +101,7 @@ export class AppModule {
       },
       receiver,
       installerOptions: {
-        redirectUriPath: '/slack/add', // and here!
+        redirectUriPath: '/slack/add',
       },
     });
     this._slackService.initSlackEvent(boltApp);
