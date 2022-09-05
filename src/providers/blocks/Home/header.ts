@@ -26,6 +26,10 @@ export function header() {
         text: 'Add Slack invite link',
         actionId: Action.AddSlackInvite,
       }).primary(),
+      Elements.Button({
+        text: 'Add Job Role',
+        actionId: Action.AddJobRoles,
+      }).primary(),
     ),
     Blocks.Divider(),
     // Blocks.Actions().elements(

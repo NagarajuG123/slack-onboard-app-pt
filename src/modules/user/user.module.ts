@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { JobRoleModule } from '../job-role/job-role.module';
 import { MailModule } from '../mail/mail.module';
 import { ActionService } from '../slack/services/action.service';
 import { EventService } from '../slack/services/event.service';
@@ -21,6 +22,7 @@ import { UserService } from './user.service';
     ]),
     WorkspaceModule,
     MailModule,
+    JobRoleModule,
   ],
   providers: [
     UserService,

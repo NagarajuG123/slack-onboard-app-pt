@@ -12,6 +12,8 @@ import { CommandService } from './services/command.service';
 import { EmployerService } from '../employer/employer.service';
 import { EmployerModule } from '../employer/employer.module';
 import { MailModule } from '../mail/mail.module';
+import { JobRoleModule } from '../job-role/job-role.module';
+import { JobRoleService } from '../job-role/job-role.service';
 
 @Module({
   imports: [
@@ -20,6 +22,7 @@ import { MailModule } from '../mail/mail.module';
     UserModule,
     EmployerModule,
     MailModule,
+    JobRoleModule,
   ],
   providers: [
     SlackService,

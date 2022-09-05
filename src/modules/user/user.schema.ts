@@ -26,6 +26,19 @@ export class User extends Document {
 
   @Prop({})
   userRole: string;
+
+  @Prop({
+    ref: 'JobRole',
+  })
+  jobRole: Types.ObjectId;
+
+  @Prop({
+    default: null,
+  })
+  projectName: string;
+
+  @Prop()
+  channelIds: [string];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

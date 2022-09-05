@@ -7,4 +7,12 @@ export enum Action {
   SelectUserRole = 'select_user_role_action',
   AddSlackInvite = 'add_slack_invite_action',
   GetSlackInviteLink = 'get_slack_invite_link_action',
+  AddJobRoles = 'add_job_role_action',
+  GetJobRoleName = 'get_jobrole_name_action',
+  GetNoofChannels = 'get_no_of_channels_action',
+  SelectChannelType = 'select_channel_type_action',
+  GetUserChannelNames = 'get_user_channel_names_action',
+  GetProjectChannelNames = 'get_project_channel_names_action',
+  SelectJobRole = 'select_job_role_action',
+  GetProjectName = 'get_project_name_action',
 }

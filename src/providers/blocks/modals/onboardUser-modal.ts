@@ -18,7 +18,8 @@ import { Action } from 'src/enums/Actions.enum';
 import { Block } from 'src/enums/Blocks.enum';
 import { ViewSubmission } from 'src/enums/view-submissions.enum';
 
-export function onboardUser(userRoles): any {
+export function onboardUser(jobRoles, projectNameBlock?): any {
+  let jobRolesOptions = [];
   let options = [
     Option({
       text: 'Candidate',
@@ -37,6 +38,18 @@ export function onboardUser(userRoles): any {
       value: 'Vendor',
     }),
   ];
+
+  if (jobRoles.length !== 0) {
+    let jobRoleCount = jobRoles.length;
+    for (let i = 0; i < jobRoleCount; i++) {
+      jobRolesOptions.push(
+        Option({
+          text: jobRoles[i],
+          value: jobRoles[i],
+        }),
+      );
+    }
+  }
   const blocks = [
     Input({
       label: `Enter Name`,
@@ -68,7 +81,26 @@ export function onboardUser(userRoles): any {
     }).accessory(
       StaticSelect().actionId(Action.SelectUserRole).options(options),
     ),
+    Section({
+      text: bold('Select Job Role'),
+      blockId: Block.SelectJobRole,
+    }).accessory(
+      StaticSelect().actionId(Action.SelectJobRole).options(jobRolesOptions),
+    ),
   ];
+
+  if (projectNameBlock) {
+    blocks.push(
+      Input({
+        label: `Enter Project Name to Assign`,
+        blockId: Block.GetProjectName,
+      }).element(
+        TextInput({
+          actionId: Action.GetProjectName,
+        }).placeholder('Ex:Interview-Bot'),
+      ),
+    );
+  }
 
   return Modal({
     title: 'User Onboard Form',

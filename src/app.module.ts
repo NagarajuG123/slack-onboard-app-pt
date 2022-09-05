@@ -18,6 +18,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { MailModule } from './modules/mail/mail.module';
+import { JobRoleService } from './modules/job-role/job-role.service';
+import { JobRoleModule } from './modules/job-role/job-role.module';
 
 @Module({
   imports: [
@@ -72,6 +74,7 @@ import { MailModule } from './modules/mail/mail.module';
     SlackModule,
     SharedModule,
     MailModule,
+    JobRoleModule,
   ],
   controllers: [AppController, SlackController],
   providers: [AppService],

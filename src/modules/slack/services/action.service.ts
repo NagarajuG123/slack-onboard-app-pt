@@ -11,6 +11,8 @@ import { adminHome } from 'src/providers/blocks/Home';
 import { Action } from 'src/enums/Actions.enum';
 import { onboardUser } from 'src/providers/blocks/modals/onboardUser-modal';
 import { getSlackInvite } from 'src/providers/blocks/modals/getSlackInvite-modal';
+import { addJobRolesModal } from 'src/providers/blocks/modals/addJobRole-modal';
+import { JobRoleService } from 'src/modules/job-role/job-role.service';
 
 @Injectable()
 export class ActionService {
@@ -18,6 +20,7 @@ export class ActionService {
     private _userService: UserService,
     private _rollbarLogger: RollbarLogger,
     private _workspaceService: WorkspaceService,
+    private _jobRoleService: JobRoleService,
   ) {}
 
   async openOnboardForm(context, client, body) {
@@ -28,10 +31,20 @@ export class ActionService {
       { text: 'Employee', value: 'employee' },
     ];
 
-    console.log(body);
+    let jobRoles = await this._jobRoleService.findall({
+      workspace: context.teamId,
+    });
+
+    let jobRoleOptions = [];
+
+    for (let role of jobRoles) {
+      jobRoleOptions.push(role.name);
+    }
+
+    console.log(jobRoleOptions);
     client.views.open({
       trigger_id: body.trigger_id,
-      view: onboardUser(userRoles),
+      view: onboardUser(jobRoleOptions),
     });
   }
 
@@ -41,4 +54,49 @@ export class ActionService {
       view: getSlackInvite(),
     });
   }
+
+  async openAddJobRolesModal(client, body) {
+    await client.views.open({
+      trigger_id: body.trigger_id,
+      view: addJobRolesModal(),
+    });
+  }
+
+  async refreshPage(client, body) {
+    await client.views.publish({
+      user_id: body.user.id,
+      view: adminHome(),
+    });
+  }
+
+  async addProjectNameBlock(context, client, body) {
+    let jobRoleOptions = [];
+    const { actions } = body;
+    //console.log(actions);
+    const value = actions[0].selected_option.value;
+    let jobRole = await this._jobRoleService.findOne({ name: value });
+    let jobRoles = await this._jobRoleService.findall({
+      workspace: context.teamId,
+    });
+    for (let role of jobRoles) {
+      jobRoleOptions.push(role.name);
+    }
+    console.log(jobRole);
+    if (jobRole.projectChannelNames !== null) {
+      let projectNameBlock = true;
+      client.views.update({
+        view_id: body.view.id,
+        view: onboardUser(jobRoleOptions, projectNameBlock),
+      });
+    }
+  }
+
+  // async addChannelsInput(client, body) {
+  //   const channelsCount = body.actions[0].selected_option.value;
+  //   console.log(channelsCount);
+  //   client.views.update({
+  //     view_id: body.view.id,
+  //     view: addJobRolesModal(parseInt(channelsCount)),
+  //   });
+  // }
 }
