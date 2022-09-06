@@ -6,6 +6,7 @@ import { MailService } from 'src/modules/mail/mail.service';
 import { UserService } from 'src/modules/user/user.service';
 import { WorkspaceService } from 'src/modules/workspace/workspace.service';
 import { noViewHome } from 'src/providers/blocks/Home';
+import { differenceWith, isEqual } from 'lodash';
 
 @Injectable()
 export class ViewSubmissionService {
@@ -110,10 +111,45 @@ export class ViewSubmissionService {
       name: name,
       publicChannelNames: publicChannelNames,
       privateChannelNames: privateChannelNames,
-      has_projectChannels: has_projectChannels == 'Yes' ? true : false,
+      has_projectChannels: has_projectChannels == 'true' ? true : false,
       workspace: context.teamId,
     };
 
     await this._jobRoleService.create(jobRoleData);
+  }
+
+  async saveGlobalMembers(context, view) {
+    const { select_global_channel_members_block } = view.state.values;
+    let newGlobalMembers =
+      select_global_channel_members_block.select_global_channel_members_action
+        .selected_users;
+
+    try {
+      let workspace = await this._workspaceService.findOne({
+        _id: context.teamId,
+      });
+
+      let savedMembers = workspace.globalChannelMembers;
+      //console.log(savedMembers);
+      let removedMembers = differenceWith(
+        savedMembers,
+        newGlobalMembers,
+        isEqual,
+      );
+      //console.log(removedMembers);
+      for (let member of removedMembers) {
+        await this._workspaceService.findByIdAndRemove(workspace._id, {
+          globalChannelMembers: member,
+        });
+      }
+      let response = await this._workspaceService.findByIdAndUpdate(
+        context.teamId,
+        { globalChannelMembers: { $each: newGlobalMembers } },
+      );
+    } catch (error) {
+      this._rollbarLogger.error(
+        `ViewSubmission Service - saveGlobalMembers ${error}`,
+      );
+    }
   }
 }

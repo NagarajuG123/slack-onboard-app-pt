@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UsersInfoResponse } from '@slack/web-api';
 import { RollbarLogger } from 'nestjs-rollbar';
+import { JobRole } from 'src/modules/job-role/job-role.schema';
 import { JobRoleService } from 'src/modules/job-role/job-role.service';
 import { User } from 'src/modules/user/user.schema';
 import { UserService } from 'src/modules/user/user.service';
@@ -47,17 +48,19 @@ export class EventService {
           userExists._id,
           { slackUniqueId: slackUniqueId },
         );
-        await this.createChannels(updatedUser, client, context.botAccessToken);
+        await this.createChannels(updatedUser, client, context.teamId);
       }
     } catch (error) {
       this._rollbarLogger.error(`Event Service - processUserJoin ${error}`);
     }
   }
 
-  async createChannels(updatedUser: User, client, botAccessToken) {
+  async createChannels(updatedUser: User, client, workspace_id) {
     let createChannelResponse;
     let user = await this._userService.findOne({ _id: updatedUser._id });
     let jobRole = await this._jobRoleService.findOne({ _id: user.jobRole });
+    let workspace = await this._workspaceService.findOne({ _id: workspace_id });
+    let globalMembers = workspace.globalChannelMembers.toString();
 
     let userChannelNames = jobRole.privateChannelNames;
     let projectChannelNames = jobRole.publicChannelNames;
@@ -66,30 +69,26 @@ export class EventService {
     let projectName = user.projectName;
     let privateChannels = userChannelNames.split(',');
     let publicChannels = projectChannelNames.split(',');
-    let projectRegex = /<projectname>/gi;
-    let userRegex = /<username>/gi;
-    let roleRegex = /<role>/gi;
-    let finalPrivateChannels = [];
-    for (let name of privateChannels) {
-      let projectnameReplaced = name.replace(projectRegex, projectName);
-      let usernameReplaced = projectnameReplaced.replace(userRegex, userName);
-      let rolenameReplaced = usernameReplaced.replace(roleRegex, jobRole.name);
 
-      finalPrivateChannels.push({
-        name: rolenameReplaced.toLowerCase(),
-        type: 'private',
-      });
+    let finalPrivateChannels, finalPublicChannels;
+    if (privateChannels.length !== 0) {
+      finalPrivateChannels = await this.createChannelNames(
+        privateChannels,
+        projectName,
+        userName,
+        jobRole,
+        'private',
+      );
     }
 
-    let finalPublicChannels = [];
-    for (let name of publicChannels) {
-      let projectnameReplaced = name.replace(projectRegex, projectName);
-      let usernameReplaced = projectnameReplaced.replace(userRegex, userName);
-      let rolenameReplaced = usernameReplaced.replace(roleRegex, jobRole.name);
-      finalPublicChannels.push({
-        name: rolenameReplaced.toLowerCase(),
-        type: 'public',
-      });
+    if (publicChannels.length !== 0) {
+      finalPublicChannels = await this.createChannelNames(
+        publicChannels,
+        projectName,
+        userName,
+        jobRole,
+        `public`,
+      );
     }
 
     let channelNames = [...finalPrivateChannels, ...finalPublicChannels];
@@ -98,7 +97,7 @@ export class EventService {
     for (let channel of channelNames) {
       try {
         createChannelResponse = await client.conversations.create({
-          token: botAccessToken,
+          token: workspace.botAccessToken,
           name: channel.name,
           is_private: channel.type == 'public' ? false : true,
         });
@@ -107,8 +106,8 @@ export class EventService {
           createChannelResponse.error == 'name_taken'
         ) {
           let response = await client.conversations.create({
-            token: botAccessToken,
-            name: channel.name + 1,
+            token: workspace.botAccessToken,
+            name: `${channel.name}${1}`,
             is_private: channel.type == 'public' ? false : true,
           });
           channelIds.push(response.channel.id);
@@ -123,13 +122,13 @@ export class EventService {
       channelIds: channelIds,
     });
 
-    //Add user to channels
+    //Add user and global members to channels
     for (let id of channelIds) {
       try {
         let addUserResponse = await client.conversations.invite({
-          token: botAccessToken,
+          token: workspace.botAccessToken,
           channel: id,
-          users: user.slackUniqueId,
+          users: `${user.slackUniqueId},${globalMembers}`,
         });
       } catch (error) {
         this._rollbarLogger.error(
@@ -137,5 +136,28 @@ export class EventService {
         );
       }
     }
+  }
+
+  private createChannelNames(
+    channels: string[],
+    projectName: string,
+    userName: string,
+    jobRole: JobRole,
+    slackChannelType: string,
+  ) {
+    let projectRegex = /<projectname>/gi;
+    let userRegex = /<username>/gi;
+    let roleRegex = /<role>/gi;
+    let channelNames = [];
+    for (let name of channels) {
+      let projectnameReplaced = name.replace(projectRegex, projectName);
+      let usernameReplaced = projectnameReplaced.replace(userRegex, userName);
+      let rolenameReplaced = usernameReplaced.replace(roleRegex, jobRole.name);
+      channelNames.push({
+        name: rolenameReplaced.toLowerCase(),
+        type: slackChannelType,
+      });
+    }
+    return channelNames;
   }
 }

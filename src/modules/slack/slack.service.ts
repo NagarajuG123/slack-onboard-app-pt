@@ -78,6 +78,22 @@ export class SlackService {
       await ack();
     });
 
+    boltApp.action(
+      Action.AddGlobalChannelMembers,
+      async ({ ack, client, context, body }) => {
+        await ack();
+        await this._actionService.openAddGlobalChannelMembersModal(
+          client,
+          context,
+          body,
+        );
+      },
+    );
+
+    boltApp.action(Action.SelectGlobalChannelMembers, async ({ ack }) => {
+      await ack();
+    });
+
     boltApp.action(Action.SelectProjectChannelRequired, async ({ ack }) => {
       await ack();
     });
@@ -106,6 +122,14 @@ export class SlackService {
       async ({ ack, context, view }) => {
         await ack();
         await this._viewSubmissionService.saveJobRole(context, view);
+      },
+    );
+
+    boltApp.view(
+      ViewSubmission.SubmitGlobalChannelMembers,
+      async ({ ack, context, view }) => {
+        await ack();
+        await this._viewSubmissionService.saveGlobalMembers(context, view);
       },
     );
   }

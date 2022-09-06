@@ -13,6 +13,7 @@ import { onboardUser } from 'src/providers/blocks/modals/onboardUser-modal';
 import { getSlackInvite } from 'src/providers/blocks/modals/getSlackInvite-modal';
 import { addJobRolesModal } from 'src/providers/blocks/modals/addJobRole-modal';
 import { JobRoleService } from 'src/modules/job-role/job-role.service';
+import { addGlobalChannelMembers } from 'src/providers/blocks/modals/addGlobalChannelMembers-modal';
 
 @Injectable()
 export class ActionService {
@@ -87,6 +88,23 @@ export class ActionService {
         view_id: body.view.id,
         view: onboardUser(jobRoleOptions, jobRole.has_projectChannels),
       });
+    }
+  }
+
+  async openAddGlobalChannelMembersModal(client, context, body) {
+    try {
+      let workspace = await this._workspaceService.findOne({
+        _id: context.teamId,
+      });
+
+      await client.views.open({
+        trigger_id: body.trigger_id,
+        view: addGlobalChannelMembers(workspace.globalChannelMembers),
+      });
+    } catch (error) {
+      this._rollbarLogger.error(
+        `Action Service - openAddGlobalChannelMembersModal ${error}`,
+      );
     }
   }
 
