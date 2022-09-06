@@ -23,10 +23,21 @@ export class WorkspaceService {
 
   async findByIdAndUpdate(
     id: string,
-    set?: { installedBy } | { botAccessToken } | { slackInvite },
+    set?:
+      | { installedBy }
+      | { botAccessToken }
+      | { slackInvite }
+      | { globalChannelMembers },
   ): Promise<Workspace> {
     return this._workspaceModel.findByIdAndUpdate(id, {
-      $set: set,
+      $addToSet: set,
     });
+  }
+
+  async findByIdAndRemove(
+    id: string,
+    data: { globalChannelMembers: any },
+  ): Promise<Workspace> {
+    return this._workspaceModel.findByIdAndUpdate(id, { $pull: data });
   }
 }

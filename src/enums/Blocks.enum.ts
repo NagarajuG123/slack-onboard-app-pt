@@ -12,4 +12,5 @@ export enum Block {
   SelectJobRole = 'select_job_role_block',
   GetProjectName = 'get_project_name_block',
   SelectProjectChannelRequired = 'select_projectchannel_required_block',
+  SelectGlobalChannelMembers = 'select_global_channel_members_block',
 }

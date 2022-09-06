@@ -16,4 +16,6 @@ export enum Action {
   SelectJobRole = 'select_job_role_action',
   GetProjectName = 'get_project_name_action',
   SelectProjectChannelRequired = 'select_projectchannel_required_action',
+  AddGlobalChannelMembers = 'add_global_channel_members_action',
+  SelectGlobalChannelMembers = 'select_global_channel_members_action',
 }

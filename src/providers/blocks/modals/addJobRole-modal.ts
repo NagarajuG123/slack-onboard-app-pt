@@ -74,23 +74,30 @@ export function addJobRolesModal(channelsCount?: number): any {
     //   StaticSelect().actionId(Action.SelectChannelType).options(options),
     // ),
     Input({
-      label: `Enter Public Channel names to be created separated by comma \n Give &lt;projectname&gt; or &lt;username&gt; or &lt;role&gt; to replace with particular user's or Project's Name`,
+      label: `Enter Public Channel names to be created separated by comma`,
       blockId: Block.GetPublicChannelNames,
-    }).element(
-      TextInput({
-        actionId: Action.GetPublicChannelNames,
-      }).placeholder('Ex:<ProjectName>-<role>-support'),
-    ),
+    })
+      .element(
+        TextInput({
+          actionId: Action.GetPublicChannelNames,
+        }).placeholder(`Enter public channels' names`),
+      )
+      .hint(
+        '&lt;projectname&gt;-&lt;role&gt;-support -> interviewbot-qa-support \n &lt;username&gt;-billing -> priya-billing',
+      ),
     Input({
-      label: `Enter Private Channel names separated by comma \n Give &lt;projectname&gt; or &lt;username&gt; or &lt;role&gt; to replace with particular user's or Project's Name`,
+      label: `Enter Private Channel names separated by comma \n`,
       blockId: Block.GetPrivateChannelNames,
     })
       .element(
         TextInput({
           actionId: Action.GetPrivateChannelNames,
-        }).placeholder(`Ex:<ProjectName>-<UserName>-support`),
+        }).placeholder(`Enter private channels' names`),
       )
-      .optional(true),
+      .optional(true)
+      .hint(
+        '&lt;projectname&gt;-&lt;role&gt;-support -> interviewbot-qa-support \n &lt;username&gt;-billing -> priya-billing',
+      ),
     Section({
       text: bold('Has the required channel has project name?'),
       blockId: Block.SelectProjectChannelRequired,

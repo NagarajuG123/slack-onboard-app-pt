@@ -22,6 +22,9 @@ export class Workspace extends Document {
   @Prop()
   slackInvite: string;
 
+  @Prop()
+  globalChannelMembers: [string];
+
   @Prop({
     ref: Employer.name,
     default: null,
