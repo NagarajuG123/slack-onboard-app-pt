@@ -12,12 +12,12 @@ features:
     always_online: true
   slash_commands:
     - command: /onboard
-      url: <your-domain-url>/slack/command
+      url: https://e250-103-99-10-151.in.ngrok.io/slack/command
       description: test command
       should_escape: false
 oauth_config:
   redirect_urls:
-    - <your-domain-url>/slack/add
+    - https://e250-103-99-10-151.in.ngrok.io/slack/add
   scopes:
     user:
       - channels:history
@@ -50,7 +50,7 @@ oauth_config:
       - im:write
 settings:
   event_subscriptions:
-    request_url: <your-domain-url>/slack/events
+    request_url: https://e250-103-99-10-151.in.ngrok.io/slack/events
     user_events:
       - message.channels
     bot_events:
@@ -59,7 +59,7 @@ settings:
       - team_join
   interactivity:
     is_enabled: true
-    request_url: <your-domain-url>/slack/interactive
+    request_url: https://e250-103-99-10-151.in.ngrok.io/slack/interactive
   org_deploy_enabled: false
   socket_mode_enabled: false
   token_rotation_enabled: false
