@@ -1,26 +1,38 @@
-#[App]
-    PORT=3000
-    APP_ENV="Production"
-
-#[Rollbar]
-    ROLLBAR_ENVIRONMENT="Production"
-    ROLLBAR_ACCESS_TOKEN=f637741175b04d83a0a7972c953a0c5b
-
-#[Slack]
-    SLACK_APP_ID="A041EUQ1C3E"
-    SLACK_CLIENT_ID="4043534598085.4048976046116"
-    SLACK_CLIENT_SECRET="3b10ef80451a04120d29ef6c970a0192"
-    SLACK_SIGNING_SECRET="1cafaac70c37688a65c5ff7ebb34cf0b"
-
-#[MONGO DB]
-    MONGOOSE_URI="mongodb+srv://admin:6DgQ76zDkk7B7WiS@onboarding-bot-prod.a7jizft.mongodb.net/?retryWrites=true&w=majority"
-
-
-#[SMTP]
-EMAIL_HOST="smtp.sendgrid.net"
-EMAIL_USER="apikey"
-EMAIL_PASSWORD="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"
-EMAIL_FROM_EMAIL="vvisagalakshmi@gmail.com"
+display_information:
+  name: onboarding-bot-local
+  description: Helps in employee onboarding process
+  background_color: '#1d7c00'
+features:
+  app_home:
+    home_tab_enabled: true
+    messages_tab_enabled: true
+    messages_tab_read_only_enabled: false
+  bot_user:
+    display_name: Onboarding-Bot-local
+    always_online: true
+  slash_commands:
+    - command: /onboard
+      url: https://a603-103-81-77-86.in.ngrok.io/slack/command
+      description: test command
+      should_escape: false
+oauth_config:
+  redirect_urls:
+    - https://a603-103-81-77-86.in.ngrok.io/slack/add
+  scopes:
+    user:
+      - channels:history
+      - channels:write
+      - chat:write
+      - groups:history
+      - groups:read
+      - groups:write
+      - mpim:history
+      - mpim:read
+      - mpim:write
+      - users:read
+      - users:read.email
+      - im:write
+    bot:
       - channels:history
       - channels:join
       - channels:manage
@@ -38,7 +50,7 @@ EMAIL_FROM_EMAIL="vvisagalakshmi@gmail.com"
       - im:write
 settings:
   event_subscriptions:
-    request_url: https://e250-103-99-10-151.in.ngrok.io/slack/events
+    request_url: https://a603-103-81-77-86.in.ngrok.io/slack/events
     user_events:
       - message.channels
     bot_events:
@@ -47,7 +59,7 @@ settings:
       - team_join
   interactivity:
     is_enabled: true
-    request_url: https://e250-103-99-10-151.in.ngrok.io/slack/interactive
+    request_url: https://a603-103-81-77-86.in.ngrok.io/slack/interactive
   org_deploy_enabled: false
   socket_mode_enabled: false
   token_rotation_enabled: false
